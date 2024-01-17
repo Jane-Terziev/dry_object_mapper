@@ -2,12 +2,12 @@
 
 Transform your ActiveRecord objects into Dry::Struct DTO objects.
 Benefits of returning a DTO instead of an ActiveRecord object from your services:
-    
-1. It makes our code more readable, we know exactly what fields we are returning, with Type safety.
-2. It allows us to render the response in any format with ease. 
+1. It makes our code more readable, we know exactly what fields we are returning, with type safety.
+2. It allows us to render the response in any format with ease.
 3. It prevents us from accessing the Data Layer directly from the Presentation Layer, rather than going through the 
-Service Layer.
-4. It prevents us from making accidental queries.
+Service Layer, preventing accidental queries when accessing data in the views.
+4. It works with other tools that i have built, like dry-swagger, which transforms our DTO's into a valid 
+and up to date swagger documentation, with type definitions.
 
 ## Installation
 
