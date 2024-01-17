@@ -31,7 +31,7 @@ module DryObjectMapper
           result[field_name] = options[field_name]
         elsif definition[:type] == 'hash'
           result[field_name] = get_model_hash_from_definition(model_object.send(field_name), definition[:keys], options&.dig(field_name))
-        elsif definition[:type] == 'array' && definition[:keys]&.present?
+        elsif definition[:type] == 'array' && !definition[:keys]&.empty?
           result[field_name] = []
           model_object.send(field_name).each do |object|
             result[field_name] << get_model_hash_from_definition(object, definition[:keys], options&.dig(field_name))
