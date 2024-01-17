@@ -27,7 +27,7 @@ module DryObjectMapper
     def self.get_model_hash_from_definition(model_object, schema_definition, options)
       result = {}
       schema_definition.each do |field_name, definition|
-        if options&.dig(field_name).present? && !options.dig(field_name).is_a?(Hash)
+        if options&.dig(field_name) && !options.dig(field_name).is_a?(Hash)
           result[field_name] = options[field_name]
         elsif definition[:type] == 'hash'
           result[field_name] = get_model_hash_from_definition(model_object.send(field_name), definition[:keys], options&.dig(field_name))

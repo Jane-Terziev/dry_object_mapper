@@ -1,24 +1,96 @@
 # DryObjectMapper
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dry_object_mapper`. To experiment with that code, run `bin/console` for an interactive prompt.
+Transform your ActiveRecord objects into Dry::Struct DTO objects.
+Benefits of returning a DTO instead of an ActiveRecord object from your services:
+    
+1. It makes our code more readable, we know exactly what fields we are returning, with Type safety.
+2. It allows us to render the response in any format with ease. 
+3. It prevents us from accessing the Data Layer directly from the Presentation Layer, rather than going through the 
+Service Layer.
+4. It prevents us from making accidental queries.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+```ruby
+gem 'dry_object_mapper'
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+And then execute:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+    bundle install
 
 ## Usage
 
-TODO: Write usage instructions here
+Lets say we have the following Dry::Struct definitions:
+
+    class Model3Dto < Dry::Struct
+      attribute :description, Types::String
+    end
+
+    class Model2Dto < Dry::Struct
+      attribute :name, Types::String
+    end
+
+    class Model1Dto < Dry::Struct
+      attribute :id, Types::String
+      attribute :age, Types::Integer
+      attribute :model2_dto, Model2Dto
+      attribute :model3_dto, Types::Array.of(Model3Dto)
+    end
+    
+    DryObjectMapper::Mapper.call(model.all, Model1Dto)
+    => [
+            #<Model1Dto id="22bf569c-f47e-473a-a821-a41b23dae927" 
+                        age=25 
+                        model2_dto=#<Model2Dto name="Name">
+                        model3_dto=[#<Model3Dto description="Description" >]
+            >
+        ]
+
+If we want to add data that is not present in the model objects, we can pass options as an argument to the call method:
+
+    class Model1Dto < Dry::Struct
+      attribute :id, Types::String
+      attribute :age, Types::Integer
+      attribute :some_counter, Types::Integer
+      attribute :model2_dto, Model2Dto
+      attribute :model3_dto, Types::Array.of(Model3Dto)
+    end
+
+    DryObjectMapper::Mapper.call(model.all, Model1Dto, { some_counter: 10 })
+    => [
+            #<Model1Dto id="22bf569c-f47e-473a-a821-a41b23dae927" 
+                        age=25 
+                        some_counter=10
+                        model2_dto=#<Model2Dto name="Name">
+                        model3_dto=[#<Model3Dto description="Description" >]
+            >
+        ]
+
+For nested data, pass it as a hash:
+
+    class Model2Dto < Dry::Struct
+      attribute :name, Types::String
+      attribute :some_counter, Types::Integer
+    end
+
+    class Model1Dto < Dry::Struct
+      attribute :id, Types::String
+      attribute :age, Types::Integer
+      attribute :model2_dto, Model2Dto
+      attribute :model3_dto, Types::Array.of(Model3Dto)
+    end
+
+    DryObjectMapper::Mapper.call(model.all, Model1Dto, { model2_dto: { some_counter: 10 } })
+    => [
+            #<Model1Dto id="22bf569c-f47e-473a-a821-a41b23dae927" 
+                        age=25 
+                        model2_dto=#<Model2Dto name="Name" some_counter=10 >
+                        model3_dto=[#<Model3Dto description="Description" >]
+            >
+        ]
 
 ## Development
 
