@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DryObjectMapper
   class Mapper
     @@definitions = {}
@@ -16,7 +18,9 @@ module DryObjectMapper
 
       if model_object.respond_to?(:each)
         model_object = model_object.to_a
-        result = model_object.map {|it| struct_dto.new(get_model_hash_from_definition(it, schema_definition, options)) }
+        result = model_object.map do |it|
+          struct_dto.new(get_model_hash_from_definition(it, schema_definition, options))
+        end
       else
         result = struct_dto.new(get_model_hash_from_definition(model_object, schema_definition, options))
       end
@@ -27,11 +31,12 @@ module DryObjectMapper
     def self.get_model_hash_from_definition(model_object, schema_definition, options)
       result = {}
       schema_definition.each do |field_name, definition|
-        if options&.dig(field_name) && !options.dig(field_name).is_a?(Hash)
+        if options&.dig(field_name) && !options[field_name].is_a?(Hash)
           result[field_name] = options[field_name]
-        elsif definition[:type] == 'hash'
-          result[field_name] = get_model_hash_from_definition(model_object.send(field_name), definition[:keys], options&.dig(field_name))
-        elsif definition[:type] == 'array' && !definition[:keys]&.empty?
+        elsif definition[:type] == "hash"
+          result[field_name] =
+            get_model_hash_from_definition(model_object.send(field_name), definition[:keys], options&.dig(field_name))
+        elsif definition[:type] == "array" && !definition[:keys]&.empty?
           result[field_name] = []
           model_object.send(field_name).each do |object|
             result[field_name] << get_model_hash_from_definition(object, definition[:keys], options&.dig(field_name))

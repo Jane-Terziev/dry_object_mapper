@@ -3,7 +3,7 @@
 require "dry_object_mapper"
 require "dry-struct"
 require "ostruct"
-require_relative 'support/open_struct_to_hash'
+require_relative "support/open_struct_to_hash"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

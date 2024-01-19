@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require "spec_helper"
-require 'json'
+require "json"
 
 RSpec.describe DryObjectMapper::Mapper do
   let(:date) { Date.today }
@@ -7,14 +9,14 @@ RSpec.describe DryObjectMapper::Mapper do
 
   let(:object) do
     OpenStruct.new(
-      string: 'string',
+      string: "string",
       integer: 1,
       float: 1.0,
       date: date,
       datetime: datetime,
       nested_array_of_objects: [
         OpenStruct.new(
-          string: 'string',
+          string: "string",
           integer: 1,
           float: 1.0,
           date: date,
@@ -22,7 +24,7 @@ RSpec.describe DryObjectMapper::Mapper do
         )
       ],
       nested_object: OpenStruct.new(
-        string: 'string',
+        string: "string",
         integer: 1,
         float: 1.0,
         date: date,
@@ -79,16 +81,16 @@ RSpec.describe DryObjectMapper::Mapper do
 
   describe "when passing an array of objects" do
     context "and all of the fields are present" do
-      it 'should map all of the object attributes to the DTO' do
+      it "should map all of the object attributes to the DTO" do
         result = described_class.call([object], dto)
-        expect(result.map(&:to_h)).to eq([object].map {|it| deep_open_struct_to_hash(it) })
+        expect(result.map(&:to_h)).to eq([object].map { |it| deep_open_struct_to_hash(it) })
       end
     end
   end
 
   describe "when passing a single object" do
     context "and all the fields are present" do
-      it 'should map all of the object attributes to the DTO' do
+      it "should map all of the object attributes to the DTO" do
         result = described_class.call(object, dto)
         expect(result.to_h).to eq(expected_result)
       end

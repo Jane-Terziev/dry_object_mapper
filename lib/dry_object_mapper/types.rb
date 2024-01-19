@@ -1,4 +1,6 @@
-require 'dry-types'
+# frozen_string_literal: true
+
+require "dry-types"
 
 module DryObjectMapper
   class Types
