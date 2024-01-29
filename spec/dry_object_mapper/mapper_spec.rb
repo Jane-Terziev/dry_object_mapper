@@ -29,7 +29,8 @@ RSpec.describe DryObjectMapper::Mapper do
         float: 1.0,
         date: date,
         datetime: datetime
-      )
+      ),
+      empty_nested_object: nil
     )
   end
 
@@ -50,6 +51,7 @@ RSpec.describe DryObjectMapper::Mapper do
       attribute :datetime, DryObjectMapper::Types::DateTime
       attribute :nested_array_of_objects, DryObjectMapper::Types::Array.of(nested_object_struct)
       attribute :nested_object, nested_object_struct
+      attribute? :empty_nested_object, nested_object_struct.optional
     end
   end
 
@@ -75,7 +77,8 @@ RSpec.describe DryObjectMapper::Mapper do
         "float": 1.0,
         "date": date,
         "datetime": datetime
-      }
+      },
+      "empty_nested_object": nil
     }
   end
 
