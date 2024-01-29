@@ -31,8 +31,8 @@ module DryObjectMapper
     def self.get_model_hash_from_definition(model_object, schema_definition, options)
       result = {}
       schema_definition.each do |field_name, definition|
-        if options&.dig(field_name) && !options[field_name].is_a?(Hash)
-          result[field_name] = options[field_name]
+        if options.key?(field_name.to_sym)
+          result[field_name] = options[field_name.to_sym]
         elsif definition[:type] == "hash"
           if model_object.send(field_name).nil?
             result[field_name] = nil
