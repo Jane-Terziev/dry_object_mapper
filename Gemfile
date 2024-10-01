@@ -12,4 +12,4 @@ gem "rspec", "~> 3.0"
 gem "rubocop", "~> 1.21"
 
 gem "dry-struct", "~> 1"
-gem "dry_struct_parser"
+gem "dry_struct_parser", "~> 0.1.3"

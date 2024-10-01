@@ -14,13 +14,15 @@ RSpec.describe DryObjectMapper::Mapper do
       float: 1.0,
       date: date,
       datetime: datetime,
+      any: 'any_type',
       nested_array_of_objects: [
         OpenStruct.new(
           string: "string",
           integer: 1,
           float: 1.0,
           date: date,
-          datetime: datetime
+          datetime: datetime,
+          any: 'any_type'
         )
       ],
       nested_object: OpenStruct.new(
@@ -28,7 +30,8 @@ RSpec.describe DryObjectMapper::Mapper do
         integer: 1,
         float: 1.0,
         date: date,
-        datetime: datetime
+        datetime: datetime,
+        any: 'any_type'
       ),
       empty_nested_object: nil
     )
@@ -41,6 +44,7 @@ RSpec.describe DryObjectMapper::Mapper do
       attribute :float, DryObjectMapper::Types::Float
       attribute :date, DryObjectMapper::Types::Date
       attribute :datetime, DryObjectMapper::Types::DateTime
+      attribute :any, DryObjectMapper::Types::Any
     end
 
     Class.new(Dry::Struct) do
@@ -49,6 +53,7 @@ RSpec.describe DryObjectMapper::Mapper do
       attribute :float, DryObjectMapper::Types::Float
       attribute :date, DryObjectMapper::Types::Date
       attribute :datetime, DryObjectMapper::Types::DateTime
+      attribute :any, DryObjectMapper::Types::Any
       attribute :nested_array_of_objects, DryObjectMapper::Types::Array.of(nested_object_struct)
       attribute :nested_object, nested_object_struct
       attribute? :empty_nested_object, nested_object_struct.optional
@@ -62,13 +67,15 @@ RSpec.describe DryObjectMapper::Mapper do
       "float": 1.0,
       "date": date,
       "datetime": datetime,
+      "any": 'any_type',
       "nested_array_of_objects": [
         {
           "string": "string",
           "integer": 1,
           "float": 1.0,
           "date": date,
-          "datetime": datetime
+          "datetime": datetime,
+          "any": 'any_type'
         }
       ],
       "nested_object": {
@@ -76,7 +83,8 @@ RSpec.describe DryObjectMapper::Mapper do
         "integer": 1,
         "float": 1.0,
         "date": date,
-        "datetime": datetime
+        "datetime": datetime,
+        "any": 'any_type'
       },
       "empty_nested_object": nil
     }
